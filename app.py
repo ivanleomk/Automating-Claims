@@ -1,15 +1,14 @@
 #Import modules
+from __future__ import division
+
 import sys
 sys.path.append('./back-end')
-
 from helloworld import helloWorld;
 from back import getCalendarList;
 import pprint
 import xlsxwriter
-
-# import xlwt
-# from xlwt import Workbook
-
+from datetime import timedelta
+from datetime import datetime
 
 #Key Variables
 FULL_NAME = "Leo Min Kai Ivan"
@@ -21,13 +20,26 @@ WBS_NUMBER = "C-607-482-023-001"
 HOURLY_RATE = 12
 HOURS = 129
 AMOUNT_PAYABLE = 12*129
+MONTH = 5;
 
-
+compiled_shifts ={}
 #Generates List Of Shifts
-shifts  = getCalendarList()[NAME];
+shifts  = getCalendarList(MONTH)[NAME];
 print(shifts)
-for i in range(len(shifts)):
+for i in shifts.keys():
     print(i)
+    total_hours = 0;
+    for j in shifts[i]:
+        start = j[0]
+        end = j[1]
+        FMT = '%H:%M'
+        tdelta = datetime.strptime(end, FMT) - datetime.strptime(start, FMT)
+        tdelta = timedelta(days=0,seconds=tdelta.seconds, microseconds=tdelta.microseconds)
+        total_hours+=int(tdelta)
+        # TODO: Figure out how to sum up the total number of hours worked
+    print(total_hours)
+
+# TODO: figure out how to then pass this into the original dictionary...
 
 #Generates Excel Workbook and Sheet using xlsxwriter
 workbook = xlsxwriter.Workbook('RFP.xlsx')
@@ -125,5 +137,6 @@ worksheet.write("E13","Total Hours",misc)
 worksheet.write("E14","Amount Payable",misc)
 worksheet.write("E15","WBS Number",misc)
 
+# TODO: Figure out how to then pass in this information to the excel sheetss
 #Saves Changes
 workbook.close()
