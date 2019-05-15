@@ -40,14 +40,14 @@ def main(argv,bound):
               if(begin<=dateobj<=ending):
                 #We first grab the date of the object
                 day = str(date[8:])
-                print(type(day))
+
                 #We then find the start of the shift
                 start = str(events["items"][i]["start"]["dateTime"][11:16])
                 #We then find the end of the shift
                 end = str(events["items"][i]["end"]["dateTime"][11:16])
                 #We then create an array that has the start and end of the shift in it.
                 shift = [start,end]
-                print(str(day)+":"+str(shift))
+
                 #We then add this to the dictionary of shifts for the month;
                 #If the person has done a shift before, we add the new array to the\\
                 if person in shifts:
@@ -116,7 +116,6 @@ def generateRange(date):
     end = start + timedelta(days = calendarDays[year-2017][month-1]-1 )
     return [start,end]
 
-print(getCalendarList("2019-04"))
 #checkdate()
 # if __name__ == '__main__':
 #     main(sys.argv)
