@@ -5,6 +5,7 @@ from googleapiclient import sample_tools
 from datetime import datetime
 from datetime import timedelta
 import pprint
+import unittest
 
 #Declaring Global Variables
 shifts = {}
@@ -27,6 +28,7 @@ def main(argv,bound):
           #We initially call the Google API to get a list of all the events which have been created under the ERT shift
           events = service.events().list(calendarId="gq12914gcnt4hahr4l08u064r8@group.calendar.google.com", pageToken=page_token).execute()
           #We then loop through each individual event
+
           for i in range(len(events["items"])):
               #We first extract the name of the person doing the shift
               person = str(events["items"][i]["summary"])
@@ -40,7 +42,6 @@ def main(argv,bound):
               if(begin<=dateobj<=ending):
                 #We first grab the date of the object
                 day = str(date[8:])
-
                 #We then find the start of the shift
                 start = str(events["items"][i]["start"]["dateTime"][11:16])
                 #We then find the end of the shift
@@ -58,7 +59,7 @@ def main(argv,bound):
                 else:
                     shifts[person] = {}
                     shifts[person][day] = [shift]
-          return shifts;
+          return {"shifts": shifts,"range":[begin,ending,dateRange[2]]}
           page_token = events.get('nextPageToken')
 
           if not page_token:
@@ -114,7 +115,7 @@ def generateRange(date):
         start = datetime.strptime(str(year)+ "-"+startingDate[year][month-1],'%Y-%d-%m')
 
     end = start + timedelta(days = calendarDays[year-2017][month-1]-1 )
-    return [start,end]
+    return [start,end,calendarDays[year-2017][month-1]]
 
 #checkdate()
 # if __name__ == '__main__':

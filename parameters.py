@@ -10,5 +10,3 @@ parameters = {
     "HOURS" : 129,
     "BOUND" : "2019-05"
 }
-
-#Key Variables
